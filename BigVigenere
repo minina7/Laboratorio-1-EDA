@@ -1,0 +1,177 @@
+import java.util.Scanner;
+
+public class BigVigenere {
+    private int[] key;
+    private char[][] alphabet;
+    private final String ABC = "abcdefghijklmnopqrstuvwxyzñABCDEFGHIJKLMNOPQRSTUVWXYZÑ0123456789";
+
+    public BigVigenere() {
+        Scanner scanner = new Scanner(System.in);
+        String clave;
+
+        while (true) {
+            System.out.println("Ingrese clave numérica:");
+            clave = scanner.nextLine();
+            if (clave.matches("\\d+")) {
+                break;
+            } else {
+                System.out.println("La clave no es válida, ingrese nuevamente");
+            }
+        }
+        key = new int[clave.length()];
+        for (int i = 0; i < clave.length(); i++) {
+            key[i] = Character.getNumericValue(clave.charAt(i));
+        }
+        generarMatriz();
+    }
+
+    public BigVigenere(String numericKey) {
+        key = new int[numericKey.length()];
+        for (int i = 0; i < numericKey.length(); i++) {
+            key[i] = Character.getNumericValue(numericKey.charAt(i));
+        }
+        generarMatriz();
+    }
+
+    public void generarMatriz() {
+        int n = ABC.length();
+        alphabet = new char[n][n];
+
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                alphabet[i][j] = ABC.charAt((i + j) % n);
+            }
+        }
+    }
+
+    public void setKey(int[] newKey){
+        this.key=newKey;
+        generarMatriz();
+    }
+
+    public String encrypt(String message) {
+        long starTime = System.nanoTime();
+
+        StringBuilder resultado = new StringBuilder();
+
+        for (int i = 0; i < message.length(); i++) {
+            char letra = message.charAt(i);
+            int posLetra = ABC.indexOf(letra);
+
+            if (posLetra == -1) {
+                resultado.append(letra);
+                continue;
+            }
+
+            int filaClave = key[i % key.length];
+            resultado.append(alphabet[filaClave][posLetra]);
+        }
+        long endTime = System.nanoTime();
+        System.out.println("Tiempo de ejecucion cifrado: "+ (endTime-starTime) + " nano segundos ");
+        return resultado.toString();
+
+    }
+
+    public String decrypt(String encryptedMessage) {
+        long starTime = System.nanoTime();
+        StringBuilder mensajeDescifrado = new StringBuilder();
+
+        for (int i = 0; i < encryptedMessage.length(); i++) {
+            char letraCifrada = encryptedMessage.charAt(i);
+            int filaClave = key[i % key.length];
+            int columnaOriginal = -1;
+
+            for (int j = 0; j < ABC.length(); j++) {
+                if (alphabet[filaClave][j] == letraCifrada) {
+                    columnaOriginal = j;
+                    break;
+                }
+            }
+            if (columnaOriginal == -1) {
+                mensajeDescifrado.append(letraCifrada);
+            } else {
+                mensajeDescifrado.append(ABC.charAt(columnaOriginal));
+            }
+        }
+        long endTime = System.nanoTime();
+        System.out.println("Tiempo de ejecucion descifrado: "+ (endTime-starTime) + " nano segundos ");
+        return mensajeDescifrado.toString();
+    }
+
+    public void reEncrypt() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Ingrese mensaje cifrado actual: ");
+        String encrypted = scanner.nextLine();
+        String original = decrypt(encrypted);
+        System.out.println("Mensaje original: " + original);
+
+        System.out.println("Ingrese nueva clave numerca: ");
+        String nuevaClave = scanner.nextLine();
+
+        int[] key2 = new int[nuevaClave.length()];
+        for (int i = 0; i < nuevaClave.length(); i++) {
+            key2[i] = Character.getNumericValue(nuevaClave.charAt(i));
+        }
+
+        setKey(key2);
+        String reEncrypted = encrypt(original);
+        System.out.println("Mensaje re-cifrado: " + reEncrypted);
+    }
+
+    public char search(int position) {
+        int contador = 0;
+
+        for (int i = 0; i < alphabet.length; i++) {
+            for (int j = 0; j < alphabet[i].length; j++) {
+                if (contador == position) {
+                    return alphabet[i][j];
+                }
+                contador++;
+            }
+        }
+
+        return '?';
+    }
+    public char optimalSearch(int position) {
+        int n = ABC.length();
+
+        if (position < 0 || position >= n * n) {
+            return '?';
+        }
+        int i = position / n;
+        int j = position % n;
+
+        return alphabet[i][j];
+    }
+}
+
+class Main {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("PRUEBAS");
+        //prueba corta
+        BigVigenere prueba = new BigVigenere("12345");
+        String mensaje = "hola como estas";
+        String mensajeCifrado = prueba.encrypt(mensaje);
+        String mensajeDescifrado = prueba.decrypt(mensajeCifrado);
+        System.out.println("El mensaje original es: " + mensaje);
+        System.out.println(("El mensaje cifrado es: " + mensajeCifrado));
+        System.out.println("El mensaje descifrado es: " + mensajeDescifrado);
+        if (mensajeDescifrado.equals(mensaje)) {
+            System.out.println("El mensaje es correcto");
+        } else {
+            System.out.println("El mensaje no es correcto");
+        }
+
+        System.out.println("probar tiempos de ejecucion");
+        System.out.println("ingrese clave numerica de 10,50,100,500,1000,y 5000 caracteres");
+        String claveTiempo = scanner.nextLine();
+        System.out.println("Ingrese el mismo mensaje (El mensaje a cifrar debe tener al menos 10000 carácteres");
+        String mensajeL= scanner.nextLine();
+
+        BigVigenere vigenereTiempo=new BigVigenere(claveTiempo);
+        String mensajeLcifrado=vigenereTiempo.encrypt(mensajeL);
+        vigenereTiempo.decrypt(mensajeLcifrado);
+
+    }
+}
