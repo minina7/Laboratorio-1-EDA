@@ -152,13 +152,15 @@ class Main {
         System.out.print("Ingrese clave numérica: ");
         String clave = scanner.nextLine();
         BigVigenere vigenere = new BigVigenere(clave);
+
         System.out.print("Ingrese el mensaje a cifrar: ");
         String mensaje = scanner.nextLine();
-
         String mensajeCifrado = vigenere.encrypt(mensaje);
         System.out.println("Mensaje cifrado: " + mensajeCifrado);
         String mensajeDescifrado = vigenere.decrypt(mensajeCifrado);
+
         System.out.println("Mensaje descifrado: " + mensajeDescifrado);
+
         System.out.println("\nRe-encriptar con nueva clave");
         vigenere.reEncrypt();
 
@@ -171,7 +173,7 @@ class Main {
 
         BigVigenere vigenereTiempo = new BigVigenere(claveTiempo);
         String mensajeLcifrado = vigenereTiempo.encrypt(mensajeLargo);
-        System.out.println("Mensaje cifrado: " + mensajeLcifrado.substring(0, Math.min(100, mensajeLcifrado.length())) + "...");
+        System.out.println("Mensaje cifrado: " + mensajeLcifrado);
         vigenereTiempo.decrypt(mensajeLcifrado);
     }
 }
