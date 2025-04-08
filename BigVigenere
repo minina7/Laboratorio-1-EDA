@@ -164,9 +164,9 @@ class Main {
         }
 
         System.out.println("probar tiempos de ejecucion");
-        System.out.println("ingrese clave numerica de 10,50,100,500,1000,y 5000 caracteres");
+        System.out.println("Ingrese clave númerica: ");
         String claveTiempo = scanner.nextLine();
-        System.out.println("Ingrese el mismo mensaje (El mensaje a cifrar debe tener al menos 10000 carácteres");
+        System.out.println("Ingrese el mensaje: ");
         String mensajeL= scanner.nextLine();
 
         BigVigenere vigenereTiempo=new BigVigenere(claveTiempo);
