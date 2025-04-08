@@ -149,11 +149,11 @@ class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
-        System.out.print("Ingrese clave numérica: ");
+        System.out.println("Ingrese clave numérica: ");
         String clave = scanner.nextLine();
         BigVigenere vigenere = new BigVigenere(clave);
 
-        System.out.print("Ingrese el mensaje a cifrar: ");
+        System.out.println("Ingrese el mensaje a cifrar: ");
         String mensaje = scanner.nextLine();
         String mensajeCifrado = vigenere.encrypt(mensaje);
         System.out.println("Mensaje cifrado: " + mensajeCifrado);
@@ -165,10 +165,10 @@ class Main {
         vigenere.reEncrypt();
 
 
-        System.out.println("\nPrueba de rendimiento");
-        System.out.print("Ingrese clave numérica: ");
+        System.out.println("\nPrueba de rendimiento.");
+        System.out.println("Ingrese clave numérica: ");
         String claveTiempo = scanner.nextLine();
-        System.out.print("Ingrese un mensaje: ");
+        System.out.println("Ingrese un mensaje: ");
         String mensajeLargo = scanner.nextLine();
 
         BigVigenere vigenereTiempo = new BigVigenere(claveTiempo);
